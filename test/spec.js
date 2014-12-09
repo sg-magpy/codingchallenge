@@ -46,7 +46,7 @@
   //
   asyncTest('Strict Module Definitions', function() {
 
-    expect(5);
+    expect(2);
 
     // Confirming an error is thrown when a second "mechanic" module is defined
     function mechanicLoaded() {
