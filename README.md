@@ -1,11 +1,15 @@
-# Overview
+# Bright Channel Web Application Developer Coding Exercise
+The goal of this exercise is to create a service that resolves JavaScript module dependencies.
 
-steel.js is a lightweight module dependency manager for small, non-framework implementations. Each js file defines a module in the AMD format. The js script tags must be included in the HTML page itself or manually appended to the DOM. steel.js does not do script sourcing.
+The service is already started for you in [src/steel.js](src/steel.js). For your coded solution, you need only edit the steel.js file. 
 
+Please add the appropriate logic to `window.steel = {}` to ensure that all the unit tests pass. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
 
-# Bright Channel Front-End Developer Coding Exercise
+### Notes
 
-This repo purposefully has [src/steel.js](src/steel.js) left blank, and it is your task to add the appropriate logic to `window.steel = {}` to ensure that all the unit tests pass. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
+- steel.js should not do script loading.
+- The "component" module requirement is slightly different than the others (app, factory, service), please read the documentation carefully
+- This is a *coding* exercise, please write code in the [src/steel.js](src/steel.js) file to pass the jUnit tests
 
 
 # Example Usage of the steel.js Library
