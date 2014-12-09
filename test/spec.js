@@ -44,24 +44,14 @@
   // It also checks to make sure a module is only executed once, 
   //   even if it is labeled as the dependency of 2 or more other modules.
   //
-  asyncTest('Strict Module Definitions', function() {
-
-    expect(2);
+  test('Strict Module Definitions', function() {
 
     // Confirming an error is thrown when a second "mechanic" module is defined
-    function mechanicLoaded() {
-      try {
-        steel.service('mechanic', function() {});
-      } catch (error) {
-        ok(true, 'Expected functionality: cannot define same module name twice');
-        start();
-      }
+    try {
+      steel.service('mechanic', function() {});
+    } catch (error) {
+      ok(true, 'Expected functionality: cannot define same module name twice');
     }
-
-    // Callback for the first "mechanic" module to load
-    steel.app(['mechanic'], function(mech) {
-      setTimeout(mechanicLoaded, 0);
-    });
 
     // The garage service labels automobile.js as a dependency, and checks the execution count, 
     //   expecting only 1 total execution of automobile.js's callback function
