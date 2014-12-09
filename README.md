@@ -3,6 +3,8 @@ The goal of this exercise is to code a service that resolves JavaScript module d
 
 The service is already started for you in [src/steel.js](src/steel.js). For your coded solution, you need only edit the steel.js file. 
 
+Use the provided documentation and a test suite to drive your development of steel.js.
+
 Please add the appropriate logic to `window.steel = {}` to ensure that all the unit tests pass. The test file ([test/spec.js](test/spec.js)) explains all the tests in detail. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
 
 ### Notes
@@ -10,7 +12,7 @@ Please add the appropriate logic to `window.steel = {}` to ensure that all the u
 - steel.js should not do script loading.
 - The "component" module requirement is slightly different than the others (app, factory, service), please read the documentation carefully
 - This exercise is inspired by TDD, and therefore all the tests have already been written, you just need to write the necessary code in [src/steel.js](src/steel.js) to pass the jUnit tests in [test/index.html](test/index.html)
-- Your complete solution should correctly be described by the **Documentation** section below
+- Your complete solution should be correctly described by the **Documentation** section below
 
 
 # Example Usage of the steel.js Library
