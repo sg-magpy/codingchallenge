@@ -3,8 +3,9 @@ The goal of this exercise is to code a service that resolves JavaScript module d
 
 The service is already started for you in [src/steel.js](src/steel.js). For your coded solution, you need only edit the steel.js file. 
 
-Use the provided documentation and a test suite to drive your development of steel.js.
+Use the included documentation and test suite to drive your development of steel.js.
 
+#### The Task
 Please add the appropriate logic to `window.steel = {}` to ensure that all the unit tests pass. The test file ([test/spec.js](test/spec.js)) explains all the tests in detail. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
 
 ### Notes
