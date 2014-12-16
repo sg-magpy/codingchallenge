@@ -3,7 +3,7 @@ The goal of this exercise is to code a service that resolves JavaScript module d
 
 The service is already started for you in [src/steel.js](src/steel.js). For your coded solution, you need only edit the steel.js file. 
 
-Use the included documentation and test suite to drive your development of steel.js.
+Use the included documentation and test suite to drive your development of steel.js. 
 
 #### The Task
 Please add the appropriate logic to `window.steel = {}` to ensure that all the unit tests pass. The test file ([test/spec.js](test/spec.js)) explains all the tests in detail. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
@@ -15,10 +15,11 @@ Please add the appropriate logic to `window.steel = {}` to ensure that all the u
 - This exercise is inspired by TDD, and therefore all the tests have already been written, you just need to write the necessary code in [src/steel.js](src/steel.js) to pass the jUnit tests in [test/index.html](test/index.html)
 - Your complete solution should be correctly described by the **Documentation** section below
 
+This library was inspired by Angular's naming scheme, and by Require.js's production-ready resolver, Almond.js. The following example should also explain how steel.js should function.
 
 # Example Usage of the steel.js Library
 
-The following shows how the steel.js library could be used to resolve dependencies.
+The following example shows how the completed steel.js library could be used to resolve dependencies.
 
 `/index.html`
 ```html
