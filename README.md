@@ -115,7 +115,7 @@ Callback function executed when all dependencies (if any) have executed. The fun
 
 ## steel.component([name, ] [dependecies, ] module)
 
-Create an component module.
+Create a component module.
 
 #### `name`: String
 Define a name for the module, required if referenced as a dependency by another module.
