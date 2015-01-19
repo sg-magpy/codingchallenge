@@ -37,9 +37,7 @@ module.exports = function(grunt) {
                 }
             },
             rules: [            
-                {from: '^/tests(.*)', to: '/test/index.html$1'},
-                {from: '^/$', to: '/src/index.html'},
-                {from: '^/(.*)$', to: '/$1'}
+                {from: '^/tests(.*)', to: '/test/index.html$1'}
             ]
         },
         watch: {
