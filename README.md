@@ -68,7 +68,10 @@ steel.app(['mechanic', 'automobile'], function(mechanic, automobile) {
 
 });
 ```
-
+# Grunt Server
+Install dependencies: `npm install`
+Start a local server: `grunt server`
+Navigate to `localhost:1111`
 
 # Documentation
 
