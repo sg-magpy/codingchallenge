@@ -7,7 +7,7 @@ module.exports = function(grunt) {
             },
             my_target: {
               files: {
-                'src/app.min.js': ['src/steel.js', 'src/automobile.js', 'src/mechanic.js', 'src/workshop.js', 'src/app.js']
+                'src/app.min.js': ['src/steel.js', 'src/automobile.js', 'src/mechanic.js', 'src/app.js']
               }
             }
         },
