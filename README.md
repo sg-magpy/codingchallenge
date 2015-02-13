@@ -15,7 +15,7 @@ Please add the appropriate logic to `window.steel = {}` in [src/steel.js](src/st
 - This exercise is inspired by TDD, and therefore all the tests have already been written, you just need to write the necessary code in [src/steel.js](src/steel.js) to pass the jUnit tests in [test/index.html](test/index.html)
 - Your complete solution should be correctly described by the **Documentation** section below
 
-This library was inspired by Angular's naming scheme, and by Require.js's production-ready resolver, Almond.js. The following example should also explain how steel.js should function.
+This library was inspired by Angular's naming scheme, and by Require.js's production-ready resolver, Almond.js. The following example demonstrates how steel.js should function.
 
 # Example Usage of the steel.js Library
 
@@ -68,10 +68,6 @@ steel.app(['mechanic', 'automobile'], function(mechanic, automobile) {
 
 });
 ```
-# Grunt Server
-Install dependencies: `npm install`
-Start a local server: `grunt server`
-Navigate to `localhost:1111`
 
 # Documentation
 
