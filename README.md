@@ -6,7 +6,7 @@ The service is already started for you in [src/steel.js](src/steel.js). For your
 Use the included documentation and test suite to drive your development of steel.js. 
 
 #### The Task
-Clone or download the repository and add the appropriate logic to `window.steel = {}` in [src/steel.js](src/steel.js) to ensure that all the unit tests pass. The test file ([test/spec.js](test/spec.js)) explains all the unit tests in detail. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver).
+Clone or download the repository and add the appropriate logic to `window.steel = {}` in [src/steel.js](src/steel.js) to ensure that all the unit tests pass. The test file ([test/spec.js](test/spec.js)) explains all the unit tests in detail. Tests can be run by opening [test/index.html](test/index.html) in a browser (there is no need to host `index.html` with a webserver). The testing is done with qUnit which you can read more about at [qunitjs.com](http://qunitjs.com/).
 
 ### Notes
 
