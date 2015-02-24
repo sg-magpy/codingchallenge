@@ -73,7 +73,6 @@
   
     // The dependencies array parameter should be optional in all module definitions
     steel.service('driver', function() {
-      complete = 2;
       ok(true, 'Expected functionality: "dependencies" parameter optional');
     });
   
