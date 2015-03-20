@@ -45,13 +45,16 @@
   //   even if it is labeled as the dependency of 2 or more other modules.
   //
   test('Strict Module Definitions', function() {
+    var threwError = false;
 
     // Confirming an error is thrown when a second "mechanic" module is defined
     try {
       steel.service('mechanic', function() {});
     } catch (error) {
-      ok(true, 'Expected functionality: cannot define same module name twice');
+      threwError = true;
     }
+    
+    ok(threwError, 'Expected functionality: cannot define same module name twice');
 
     // The garage service labels automobile.js as a dependency, and checks the execution count, 
     //   expecting only 1 total execution of automobile.js's callback function
