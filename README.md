@@ -123,4 +123,4 @@ Define a name for the module, required if referenced as a dependency by another 
 List dependencies to be injected into the `module` callback function.
 
 #### `module`: Function
-Callback function executed after the DOMready event is fired. The function is executed once and the returned value is cached for any future injections.
+Callback function executed when all dependencies (if any) have executed AND the DOMready event has fired. The function is executed once and the returned value is cached for any future injections.
