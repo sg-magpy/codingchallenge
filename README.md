@@ -1,4 +1,4 @@
-# Bright Channel Web Application Developer Coding Exercise
+# Layr Web Application Developer Coding Exercise
 The goal of this exercise is to code a service that resolves JavaScript module dependencies.
 
 The service is already started for you in [src/steel.js](src/steel.js). For your coded solution, you need only edit the steel.js file. 
