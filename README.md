@@ -10,7 +10,7 @@ Clone or download the repository and add the appropriate logic to `window.steel 
 
 ### Notes
 
-- steel.js should not do script loading, i.e. the html page should load all the necessary scripts with script tags in the <head> element.
+- steel.js should not do script loading, i.e. the html page should load all the necessary scripts with script tags in the &lt;head&gt; element.
 - The "component" module requirement is slightly different than the others (app, factory, service), please read the documentation carefully.
 - This exercise is inspired by TDD, and therefore all the tests have already been written, you just need to write the necessary code in [src/steel.js](src/steel.js) to pass the qUnit tests in [test/index.html](test/index.html)
 - Your complete solution should be correctly described by the **Documentation** section below
