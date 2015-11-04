@@ -1,32 +1,30 @@
 window.steel = function () {
-	return {
 		// Modules are cached here once they are loaded
-		cachedModules: {},
+		var cachedModules = {};
 
 		// Structure to maintain list of modules waiting for their dependencies
-		waitingModules: [],
+		var waitingModules = [];
 
 		// Set to true when the DOMContentLoaded event is fired
-		domReady: false,
+		var domReady = false;
 
-		cacheModule: function(moduleName, module) {
+		// Add a listener for the DOMContentLoaded event
+		// Set the domReady flag and process any remaining modules
+		(function () {
+			document.addEventListener('DOMContentLoaded', function() {
+				domReady = true;
+				processWaitingModules();
+			});
+		})();
+
+		var processWaitingModules = function() {
 			'use strict';
 
-			if (this.cachedModules[moduleName] === undefined) {
-				this.cachedModules[moduleName] = module;
-			} else {
-				throw 'Unallowed operation: Tried to define module ' + moduleName + ' more than once';
-			}
-		},
-
-		processWaitingModules: function() {
-			'use strict';
-
-			var numWaitingModules = this.waitingModules.length;
+			var numWaitingModules = waitingModules.length;
 
 			// Process the list of waiting modules to see if their dependencies are ready
-			for (var i = 0; i < this.waitingModules.length; i++) {
-				var waitingModule = this.waitingModules[i],
+			for (var i = 0; i < numWaitingModules; i++) {
+				var waitingModule = waitingModules[i],
 					moduleName = waitingModule.name,
 					moduleDeps = waitingModule.dependencies,
 					moduleCallback = waitingModule.callback,
@@ -40,11 +38,11 @@ window.steel = function () {
 					// Check if the module is already cached
 					// If so, add it to the list of loaded dependencies
 					// If not, exit the loop early to process the next waiting module
-					if (!this.cachedModules.hasOwnProperty(moduleDependency)) {
+					if (!cachedModules.hasOwnProperty(moduleDependency)) {
 						allLoaded = false;
 						break;
 					} else {
-						loadedModules.push(this.cachedModules[moduleDependency]);
+						loadedModules.push(cachedModules[moduleDependency]);
 					}
 				}
 
@@ -53,14 +51,14 @@ window.steel = function () {
 
 					// If this module needs to wait for the DOM to be ready, and it's not ready,
 					// continue to the next waiting module for processing
-					if (moduleShouldWaitForDom === true && this.domReady === false) {
+					if (moduleShouldWaitForDom === true && domReady === false) {
 						continue;
 					}
 
 					// Invoke the module's callback with the loaded dependencies
 					// Cache the result using the module name as the key
 					if (typeof moduleName !== 'undefined') {
-						this.cacheModule(moduleName, moduleCallback.apply(null, loadedModules));
+						cacheModule(moduleName, moduleCallback.apply(null, loadedModules));
 					} 
 
 					// No module name provided so just invoke the callback with the loaded dependencies
@@ -73,7 +71,7 @@ window.steel = function () {
 					}
 
 					// Remove the now-loaded module from the list of waiting modules
-					this.waitingModules.splice(i, 1);
+					waitingModules.splice(i, 1);
 
 					// Exit the loop early since we've modified the list of waiting modules
 					break;
@@ -81,21 +79,33 @@ window.steel = function () {
 			}
 
 			// If the list of waiting modules changed, call this method again to resolve more dependencies
-			if (numWaitingModules !== this.waitingModules.length) {
-				this.processWaitingModules();
+			if (numWaitingModules !== waitingModules.length) {
+				processWaitingModules();
 			}
-		},
+		}
 
-		app: function() {
+		var cacheModule = function(moduleName, module) {
 			'use strict';
 
-			var name, 
-				dependencies, 
-				module, 
+			if (cachedModules[moduleName] === undefined) {
+				cachedModules[moduleName] = module;
+			} else {
+				throw 'Unallowed operation: Tried to define module ' + moduleName + ' more than once';
+			}
+		}
+
+		var getModuleInfoFromArgs = function(arguments) {
+			var name,
+				dependencies,
+				module,
 				argsLength = arguments.length;
-			
+				
 			if (argsLength === 1) {
-				module = arguments[0];
+				if (typeof arguments[0] === 'function') {
+					module = arguments[0];
+				} else {
+					throw 'Invalid argument at index 0; expected function';
+				}
 			} else if (argsLength === 2) {
 				if (typeof arguments[0] === 'string') {
 					name = arguments[0];
@@ -126,117 +136,36 @@ window.steel = function () {
 				}
 			}
 
-			if (typeof name !== 'undefined' && typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module });
-			} else if (typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'dependencies': dependencies, 'callback': module });
-			} else if (typeof name !== 'undefined') {
-				this.cacheModule(name, module());
-				this.processWaitingModules();
-			} else {
-				module();
-			}
+			return { 'name': name, 'dependencies': dependencies, 'module': module };
+		}
+
+	return {
+
+		app: function() {
+			'use strict';
+			this.service.apply(this, arguments);
 		},
 
 	 	factory: function() {
 			'use strict';
-
-			var name, 
-				dependencies, 
-				module, 
-				argsLength = arguments.length;
-			
-			if (argsLength === 1) {
-				module = arguments[0];
-			} else if (argsLength === 2) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else if (Array.isArray(arguments[0])) {
-					dependencies = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string or array';
-				}
-
-				module = arguments[1];
-			} else if (argsLength === 3) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string';
-				}
-
-				if (Array.isArray(arguments[1])) {
-					dependencies = arguments[1];
-				} else {
-					throw 'Invalid argument at index 1; expected array';
-				}
-
-				if (typeof arguments[2] === 'function') {
-					module = arguments[2];
-				} else {
-					throw 'Invalid argument at index 2; expected function';
-				}
-			}
-
-			if (typeof name !== 'undefined' && typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module });
-			} else if (typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'dependencies': dependencies, 'callback': module });
-			} else if (typeof name !== 'undefined') {
-				this.cacheModule(name, module());
-				this.processWaitingModules();
-			} else {
-				module();
-			}
+			this.service.apply(this, arguments);
 		},
 
 		service: function() {
 			'use strict';
 
-			var name, 
-				dependencies, 
-				module, 
-				argsLength = arguments.length;
-
-			if (argsLength === 1) {
-				module = arguments[0];
-			} else if (argsLength === 2) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else if (Array.isArray(arguments[0])) {
-					dependencies = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string or array';
-				}
-
-				module = arguments[1];
-			} else if (argsLength === 3) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string';
-				}
-
-				if (Array.isArray(arguments[1])) {
-					dependencies = arguments[1];
-				} else {
-					throw 'Invalid argument at index 1; expected array';
-				}
-
-				if (typeof arguments[2] === 'function') {
-					module = arguments[2];
-				} else {
-					throw 'Invalid argument at index 2; expected function';
-				}
-			}
+			var moduleInfo = getModuleInfoFromArgs(arguments);
+			var name = moduleInfo['name'],
+				dependencies = moduleInfo['dependencies'],
+				module = moduleInfo['module'];
 
 			if (typeof name !== 'undefined' && typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module });
+				waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module });
 			} else if (typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'dependencies': dependencies, 'callback': module });
+				waitingModules.push({ 'dependencies': dependencies, 'callback': module });
 			} else if (typeof name !== 'undefined') {
-				this.cacheModule(name, module());
-				this.processWaitingModules();
+				cacheModule(name, module());
+				processWaitingModules();
 			} else {
 				module();
 			}
@@ -245,71 +174,33 @@ window.steel = function () {
 		component: function() {
 			'use strict';
 
-			var name, 
-				dependencies, 
-				module, 
-				argsLength = arguments.length;
-			
-			if (argsLength === 1) {
-				module = arguments[0];
-			} else if (argsLength === 2) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else if (Array.isArray(arguments[0])) {
-					dependencies = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string or array';
-				}
-
-				module = arguments[1];
-			} else if (argsLength === 3) {
-				if (typeof arguments[0] === 'string') {
-					name = arguments[0];
-				} else {
-					throw 'Invalid argument at index 0; expected string';
-				}
-
-				if (Array.isArray(arguments[1])) {
-					dependencies = arguments[1];
-				} else {
-					throw 'Invalid argument at index 1; expected array';
-				}
-
-				if (typeof arguments[2] === 'function') {
-					module = arguments[2];
-				} else {
-					throw 'Invalid argument at index 2; expected function';
-				}
-			}
+			var moduleInfo = getModuleInfoFromArgs(arguments);
+			var name = moduleInfo['name'],
+				dependencies = moduleInfo['dependencies'],
+				module = moduleInfo['module'];
 
 			if (typeof name !== 'undefined' && typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module, 'waitForDom': true });
+				waitingModules.push({ 'name': name, 'dependencies': dependencies, 'callback': module, 'waitForDom': true });
 			} else if (typeof dependencies !== 'undefined') {
-				this.waitingModules.push({ 'dependencies': dependencies, 'callback': module, 'waitForDom': true });
+				waitingModules.push({ 'dependencies': dependencies, 'callback': module, 'waitForDom': true });
 			} else if (typeof name !== 'undefined') {
 				// If the DOM is ready, execute the callback and cache the module
 				// Otherwise, add it to the list of waiting modules
-				if (this.domReady === true) {
-					this.cacheModule(name, module());
-					this.processWaitingModules();
+				if (domReady === true) {
+					cacheModule(name, module());
+					processWaitingModules();
 				} else {
-					this.waitingModules.push({ 'name': name, 'callback': module, 'waitForDom': true });
+					waitingModules.push({ 'name': name, 'callback': module, 'waitForDom': true });
 				}
 			} else {
 				// If the DOM is ready, execute the callback
 				// Otherwise, add it to the list of waiting modules
-				if (this.domReady === true) {
+				if (domReady === true) {
 					module();
 				} else {
-					this.waitingModules.push({ 'callback': module, 'waitForDom': true });
+					waitingModules.push({ 'callback': module, 'waitForDom': true });
 				}
 			}
 		}
 	}
 }();
-
-document.addEventListener('DOMContentLoaded', function() {
-	window.steel.domReady = true;
-	window.steel.processWaitingModules();
-});
-
